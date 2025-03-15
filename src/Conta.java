@@ -28,7 +28,7 @@ public abstract class Conta implements IConta {
     public void depositar(double valor) {
         if (valor > 0) {
             saldo += valor;
-            System.out.println("Depósito de " + " R$ concluído com sucesso!");
+            System.out.println("Depósito de " + valor + " R$ concluído com sucesso!");
             return;
         }
         System.out.println("Valor de depósito inválido");

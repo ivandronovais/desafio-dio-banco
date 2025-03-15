@@ -13,6 +13,17 @@ public class Cliente {
 		this.endereco = endereco;
 		this.dataNascimento = dataNascimento;
 	}
+	public Cliente(String nome, String cpf, Date dataNascimento) {
+		this.nome = nome;
+		this.cpf = cpf;
+		this.dataNascimento = dataNascimento;
+	}
+	
+	@Override
+	public String toString() {
+		return "Cliente => Nome = " + nome + ", CPF =" + cpf + ", Endereço =" + endereco + ", Nascimento"
+				+ dataNascimento;
+	}
 
 	public String getNome() {
 		return nome;

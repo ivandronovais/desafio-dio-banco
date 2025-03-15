@@ -13,6 +13,11 @@ public class Endereco {
     public String getRua() {
         return rua;
     }
+    
+    @Override
+    public String toString() {
+        return "Rua = " + rua + ", numero = " + numero + ", cidade = " + cidade;
+    }
 
     public void setRua(String rua) {
         this.rua = rua;
