@@ -21,17 +21,28 @@ public abstract class Conta implements IConta {
             System.out.println("Você sacou " + valor + " R$ da sua conta");
             return;
         }
-        System.out.println("Você não possui saldo suficiente ou digitou valor inválido para saque");  
+        System.out.println("Você não possui saldo suficiente ou digitou valor inválido para saque");
     }
+
     @Override
     public void depositar(double valor) {
-        saldo += valor;
+        if (valor > 0) {
+            saldo += valor;
+            System.out.println("Depósito de " + " R$ concluído com sucesso!");
+            return;
+        }
+        System.out.println("Valor de depósito inválido");
     }
 
     @Override
     public void transferir(double valor, IConta contaDestino) {
-        this.sacar(valor);
-        contaDestino.depositar(valor);
+        if (this.getSaldo() >= valor) {
+            this.sacar(valor);
+            contaDestino.depositar(valor);
+            System.out.println("Depósito de " + valor + " R$ realizado com sucesso!");
+            return;
+        }
+        System.out.println("Você não possui saldo suficiente para realizar essa operação");
     }
 
     public int getAgencia() {
