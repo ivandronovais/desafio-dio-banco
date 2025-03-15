@@ -1,38 +1,57 @@
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Scanner;
 
 public class App {
-    public static void main(String[] args) {
+    private static Map<String, Conta> contas = new HashMap<>();
 
+    public static void main(String[] args) {
         Scanner input = new Scanner(System.in);
         mensagemInicial();
-        int escolha = input.nextInt();
-        input.nextLine();
-        switch (escolha) {
-            case 1:
-                boolean sair = false;
-                while (!sair) {
-                    if (selecionarServico() == 1) {
-                        //Depositar
-                    } else if (selecionarServico() == 2) {
-                        //Sacar
-                    } else if(selecionarServico() == 3){
-                        //Transferir
-                    }else{
-                        System.out.println("Insira uma opção válida!");
+        boolean sair = false;
+        while (!sair) {
+            int escolha = input.nextInt();
+            input.nextLine();
+            switch (escolha) {
+                case 1:
+                    boolean retornarMenu = false;
+                    Conta contaCliente = acessarConta();
+                    while (!retornarMenu) {
+                        int servico = selecionarServico();
+                        if (servico == 1) {
+                            System.out.println("Digite o valor de depósito: ");
+                            double deposito = input.nextDouble();
+                            contaCliente.depositar(deposito);
+                        } else if (servico == 2) {
+                            System.out.println("Digite o valor de saque: ");
+                            double saque = input.nextDouble();
+                            contaCliente.sacar(saque);
+                        } else if (servico == 3) {
+                            System.out.println("Digite o CPF da conta de destino: ");
+                            String cpf = input.nextLine();
+                            System.out.println("Digite o valor de depósito: ");
+                            double valTransferencia = input.nextDouble();
+                            contaCliente.transferir(valTransferencia, contas.get(cpf));
+                        } else if (servico == 4) {
+                            contaCliente.imprimirExtrato();
+                        } else {
+                            retornarMenu = true;
+                        }
                     }
-                }
-                break;
-            case 2:
-                Conta conta = criarConta(inserirDadosPessoais());
-                System.out.println("Conta criada com sucesso!");
-                escolha = 1;
-                break;
-            default:
-                System.out.println("Saindo do aplicativo...");
-                break;
+                    break;
+                case 2:
+                    Conta conta = criarConta(inserirDadosPessoais());
+                    contas.put(conta.cliente.getCpf(), conta);
+                    System.out.println("Conta criada com sucesso!");
+                    break;
+                default:
+                    System.out.println("Saindo do aplicativo...");
+                    break;
+            }
+            sair = true;
         }
     }
 
@@ -41,12 +60,19 @@ public class App {
         System.out.println("Por favor, escolha uma opção");
         System.out.println("[1] Já sou cliente");
         System.out.println("[2] Quero abrir uma conta");
+        System.out.println("[3] Sair");
+    }
+
+    public static Conta acessarConta() {
+        Scanner input = new Scanner(System.in);
+        System.out.println("Insira o seu CPF: ");
+        return contas.get(input.nextLine());
     }
 
     public static int selecionarServico() {
         Scanner input = new Scanner(System.in);
         System.out.println("Por favor, escolha um serviço abaixo: ");
-        System.out.println("[1] Depositar \n[2] Sacar \n[3] Transferir");
+        System.out.println("[1] Depositar \n[2] Sacar \n[3] Transferir \n[4] Consultar Saldo \n[5] Sair");
         return input.nextInt();
     }
 
@@ -83,7 +109,7 @@ public class App {
     public static Conta criarConta(Cliente cli) {
         Scanner input = new Scanner(System.in);
         System.out.println("Selecione: ");
-        System.out.println("[1] Conta Corrente \n [2] Conta Poupança");
+        System.out.println("[1] Conta Corrente \n[2] Conta Poupança");
         int tipoConta = input.nextInt();
         switch (tipoConta) {
             case 1:

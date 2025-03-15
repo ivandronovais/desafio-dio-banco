@@ -57,6 +57,26 @@ public abstract class Conta implements IConta {
         return saldo;
     }
 
+    public void setAgencia(int agencia) {
+        this.agencia = agencia;
+    }
+
+    public void setNumero(int numero) {
+        this.numero = numero;
+    }
+
+    public void setSaldo(double saldo) {
+        this.saldo = saldo;
+    }
+
+    public Cliente getCliente() {
+        return cliente;
+    }
+
+    public void setCliente(Cliente cliente) {
+        this.cliente = cliente;
+    }
+
     protected void imprimirInfosComuns() {
         System.out.println(String.format("Titular: %s", this.cliente.getNome()));
         System.out.println(String.format("Agencia: %d", this.agencia));
