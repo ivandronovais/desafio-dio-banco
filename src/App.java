@@ -19,28 +19,35 @@ public class App {
                 case 1:
                     boolean retornarMenu = false;
                     Conta contaCliente = acessarConta();
-                    while (!retornarMenu) {
-                        int servico = selecionarServico();
-                        if (servico == 1) {
-                            System.out.println("Digite o valor de depósito: ");
-                            double deposito = input.nextDouble();
-                            contaCliente.depositar(deposito);
-                        } else if (servico == 2) {
-                            System.out.println("Digite o valor de saque: ");
-                            double saque = input.nextDouble();
-                            contaCliente.sacar(saque);
-                        } else if (servico == 3) {
-                            System.out.println("Digite o CPF da conta de destino: ");
-                            String cpf = input.nextLine();
-                            System.out.println("Digite o valor de depósito: ");
-                            double valTransferencia = input.nextDouble();
-                            contaCliente.transferir(valTransferencia, contas.get(cpf));
-                        } else if (servico == 4) {
-                            contaCliente.imprimirExtrato();
-                        } else {
-                            retornarMenu = true;
+                    if (contaCliente != null) {
+                        while (!retornarMenu) {
+                            int servico = selecionarServico();
+                            if (servico == 1) {
+                                System.out.println("Digite o valor de depósito: ");
+                                double deposito = input.nextDouble();
+                                contaCliente.depositar(deposito);
+                            } else if (servico == 2) {
+                                System.out.println("Digite o valor de saque: ");
+                                double saque = input.nextDouble();
+                                input.nextLine();
+                                contaCliente.sacar(saque);
+                            } else if (servico == 3) {
+                                System.out.println("Digite o CPF da conta de destino: ");
+                                String cpf = input.nextLine();
+                                if (verificarSeExiste(cpf)) {
+                                    System.out.println("Digite o valor de depósito: ");
+                                    double valTransferencia = input.nextDouble();
+                                    contaCliente.transferir(valTransferencia, contas.get(cpf));
+                                    break;
+                                }else{System.out.println("Conta não encontrada!\n");}
+                            } else if (servico == 4) {
+                                contaCliente.imprimirExtrato();
+                            } else {
+                                retornarMenu = true;
+                            }
                         }
                     }
+                    System.out.println("Conta não encontrada!\n");
                     break;
                 case 2:
                     Conta conta = criarConta(inserirDadosPessoais());
@@ -49,10 +56,17 @@ public class App {
                     break;
                 default:
                     System.out.println("Saindo do aplicativo...");
-                    break;
+                    sair = true;
             }
-            sair = true;
+            mensagemInicial();
         }
+    }
+
+    public static boolean verificarSeExiste(String cpf) {
+        if (contas.get(cpf) != null) {
+            return true;
+        }
+        return false;
     }
 
     public static void mensagemInicial() {
@@ -73,7 +87,9 @@ public class App {
         Scanner input = new Scanner(System.in);
         System.out.println("Por favor, escolha um serviço abaixo: ");
         System.out.println("[1] Depositar \n[2] Sacar \n[3] Transferir \n[4] Consultar Saldo \n[5] Sair");
-        return input.nextInt();
+        int servico = input.nextInt();
+        input.nextLine();
+        return servico;
     }
 
     public static Cliente inserirDadosPessoais() {
@@ -111,6 +127,7 @@ public class App {
         System.out.println("Selecione: ");
         System.out.println("[1] Conta Corrente \n[2] Conta Poupança");
         int tipoConta = input.nextInt();
+        input.nextLine();
         switch (tipoConta) {
             case 1:
                 return new ContaCorrente(cli);
