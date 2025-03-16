@@ -18,10 +18,12 @@ public class App {
             switch (escolha) {
                 case 1:
                     boolean retornarMenu = false;
-                    Conta contaCliente = acessarConta();
+                    Conta contaCliente = acessarConta(input);
                     if (contaCliente != null) {
+                        System.out.println("Bem vindo(a) de volta, " + contaCliente.getCliente().getNome());
                         while (!retornarMenu) {
-                            int servico = selecionarServico();
+                            int servico = selecionarServico(input);
+                            input.nextLine();
                             if (servico == 1) {
                                 System.out.println("Digite o valor de depósito: ");
                                 double deposito = input.nextDouble();
@@ -39,18 +41,21 @@ public class App {
                                     double valTransferencia = input.nextDouble();
                                     contaCliente.transferir(valTransferencia, contas.get(cpf));
                                     break;
-                                }else{System.out.println("Conta não encontrada!\n");}
+                                } else {
+                                    System.out.println("Conta não encontrada!\n");
+                                }
                             } else if (servico == 4) {
                                 contaCliente.imprimirExtrato();
                             } else {
                                 retornarMenu = true;
                             }
                         }
+                    } else {
+                        System.out.println("Conta não encontrada!\n");
                     }
-                    System.out.println("Conta não encontrada!\n");
                     break;
                 case 2:
-                    Conta conta = criarConta(inserirDadosPessoais());
+                    Conta conta = criarConta(inserirDadosPessoais(input), input);
                     contas.put(conta.cliente.getCpf(), conta);
                     System.out.println("Conta criada com sucesso!");
                     break;
@@ -77,23 +82,19 @@ public class App {
         System.out.println("[3] Sair");
     }
 
-    public static Conta acessarConta() {
-        Scanner input = new Scanner(System.in);
+    public static Conta acessarConta(Scanner input) {
         System.out.println("Insira o seu CPF: ");
         return contas.get(input.nextLine());
     }
 
-    public static int selecionarServico() {
-        Scanner input = new Scanner(System.in);
+    public static int selecionarServico(Scanner input) {
         System.out.println("Por favor, escolha um serviço abaixo: ");
         System.out.println("[1] Depositar \n[2] Sacar \n[3] Transferir \n[4] Consultar Saldo \n[5] Sair");
         int servico = input.nextInt();
-        input.nextLine();
         return servico;
     }
 
-    public static Cliente inserirDadosPessoais() {
-        Scanner input = new Scanner(System.in);
+    public static Cliente inserirDadosPessoais(Scanner input) {
         SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
         System.out.println("Que ótimo termos você conosco!");
         System.out.println("Por favor, insira seu nome: ");
@@ -107,11 +108,10 @@ public class App {
         } catch (ParseException e) {
             e.printStackTrace();
         }
-        return new Cliente(nomeCliente, cpfCliente, inserirDadosEndereco(), nasCliente);
+        return new Cliente(nomeCliente, cpfCliente, inserirDadosEndereco(input), nasCliente);
     }
 
-    public static Endereco inserirDadosEndereco() {
-        Scanner input = new Scanner(System.in);
+    public static Endereco inserirDadosEndereco(Scanner input) {
         System.out.println("Agora, insira o nome da sua rua: ");
         String rua = input.nextLine();
         System.out.println("Insira o número da sua casa: ");
@@ -122,8 +122,7 @@ public class App {
         return new Endereco(rua, numero, cidade);
     }
 
-    public static Conta criarConta(Cliente cli) {
-        Scanner input = new Scanner(System.in);
+    public static Conta criarConta(Cliente cli, Scanner input) {
         System.out.println("Selecione: ");
         System.out.println("[1] Conta Corrente \n[2] Conta Poupança");
         int tipoConta = input.nextInt();

@@ -39,7 +39,7 @@ public abstract class Conta implements IConta {
         if (this.getSaldo() >= valor) {
             this.sacar(valor);
             contaDestino.depositar(valor);
-            System.out.println("Depósito de " + valor + " R$ realizado com sucesso!");
+            System.out.println("Transferência de " + valor + " R$ realizado com sucesso!");
             return;
         }
         System.out.println("Você não possui saldo suficiente para realizar essa operação");
