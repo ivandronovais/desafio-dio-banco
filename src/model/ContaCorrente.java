@@ -1,3 +1,4 @@
+package model;
 
 public class ContaCorrente extends Conta {
 	private final double taxaDeManutencao = 49.90;

@@ -1,3 +1,7 @@
+package model;
+import interfaces.IConta;
+import util.*;
+
 public abstract class Conta implements IConta {
 
     private static final int AGENCIA_PADRAO = 1;
@@ -18,20 +22,20 @@ public abstract class Conta implements IConta {
     public void sacar(double valor) {
         if (getSaldo() >= valor && valor > 0) {
             saldo -= valor;
-            System.out.println(App.VERDE + "Você sacou " + valor + " R$ da sua conta" + App.RESET);
+            System.out.println(util.ConsoleColors.VERDE + "Você sacou " + valor + " R$ da sua conta" + util.ConsoleColors.RESET);
             return;
         }
-        System.out.println(App.VERMELHO + "Você não possui saldo suficiente ou digitou valor inválido para saque" + App.RESET);
+        System.out.println(util.ConsoleColors.VERMELHO + "Você não possui saldo suficiente ou digitou valor inválido para saque" + util.ConsoleColors.RESET);
     }
 
     @Override
     public void depositar(double valor) {
         if (valor > 0) {
             saldo += valor;
-            System.out.println(App.VERDE + "Depósito de " + valor + " R$ concluído com sucesso!" + App.RESET);
+            System.out.println(util.ConsoleColors.VERDE + "Depósito de " + valor + " R$ concluído com sucesso!" + util.ConsoleColors.RESET);
             return;
         }
-        System.out.println(App.VERMELHO + "Valor de depósito inválido" + App.RESET);
+        System.out.println(util.ConsoleColors.VERMELHO + "Valor de depósito inválido" + util.ConsoleColors.RESET);
     }
 
     @Override
@@ -39,10 +43,10 @@ public abstract class Conta implements IConta {
         if (this.getSaldo() >= valor) {
             this.sacar(valor);
             contaDestino.depositar(valor);
-            System.out.println(App.VERDE + "Transferência de " + valor + " R$ realizado com sucesso!" + App.RESET);
+            System.out.println(util.ConsoleColors.VERDE + "Transferência de " + valor + " R$ realizado com sucesso!" + util.ConsoleColors.RESET);
             return;
         }
-        System.out.println(App.VERMELHO + "Você não possui saldo suficiente para realizar essa operação" + App.RESET);
+        System.out.println(util.ConsoleColors.VERMELHO + "Você não possui saldo suficiente para realizar essa operação" + util.ConsoleColors.RESET);
     }
 
     public int getAgencia() {

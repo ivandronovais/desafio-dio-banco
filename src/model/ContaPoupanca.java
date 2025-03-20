@@ -1,3 +1,4 @@
+package model;
 public class ContaPoupanca extends Conta {
 	private final double taxaRendimentoMensal = 0.5;
 

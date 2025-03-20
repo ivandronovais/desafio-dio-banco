@@ -5,16 +5,15 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Scanner;
 
+import model.Cliente;
+import model.Conta;
+import model.ContaCorrente;
+import model.ContaPoupanca;
+import model.Endereco;
+import util.*;
+
 public class App {
     private static Map<String, Conta> contas = new HashMap<>();
-    public static final String VERDE = "\u001B[32m";
-    public static final String RESET = "\u001B[0m";
-    public static final String ROXO = "\u001B[35m";
-    public static final String FUNDO_BRANCO = "\u001B[47m";
-    public static final String VERMELHO = "\u001B[31m";
-    public static final String AZUL = "\u001B[34m";
-    public static final String FUNDO_CIANO = "\u001B[46m";
-
     public static void main(String[] args) {
         Scanner input = new Scanner(System.in);
         mensagemInicial();
@@ -28,7 +27,7 @@ public class App {
                     Conta contaCliente = acessarConta(input);
                     if (contaCliente != null) {
                         System.out.println(
-                                VERDE + "Bem vindo(a) de volta, " + contaCliente.getCliente().getNome() + RESET);
+                                util.ConsoleColors.VERDE + "Bem vindo(a) de volta, " + contaCliente.getCliente().getNome() + util.ConsoleColors.RESET);
                         while (!retornarMenu) {
                             int servico = selecionarServico(input);
                             input.nextLine();
@@ -50,7 +49,7 @@ public class App {
                                     contaCliente.transferir(valTransferencia, contas.get(cpf));
                                     break;
                                 } else {
-                                    System.out.println(VERMELHO + "Conta não encontrada!\n" + RESET);
+                                    System.out.println(util.ConsoleColors.VERMELHO + "Conta não encontrada!\n" + util.ConsoleColors.RESET);
                                 }
                             } else if (servico == 4) {
                                 contaCliente.imprimirExtrato();
@@ -59,13 +58,13 @@ public class App {
                             }
                         }
                     } else {
-                        System.out.println(VERMELHO + "Conta não encontrada!\n" + RESET);
+                        System.out.println(util.ConsoleColors.VERMELHO + "Conta não encontrada!\n" + util.ConsoleColors.RESET);
                     }
                     break;
                 case 2:
                     Conta conta = criarConta(inserirDadosPessoais(input), input);
-                    contas.put(conta.cliente.getCpf(), conta);
-                    System.out.println(VERDE + "Conta criada com sucesso!" + RESET);
+                    contas.put(conta.getCliente().getCpf(), conta);
+                    System.out.println(util.ConsoleColors.VERDE + "Conta criada com sucesso!" + util.ConsoleColors.RESET);
                     break;
                 default:
                     System.out.println("Saindo do aplicativo...");
@@ -83,11 +82,11 @@ public class App {
     }
 
     public static void mensagemInicial() {
-        System.out.println(VERDE + FUNDO_CIANO + "Bem vindo (a) ao Banco Meu Dinheirinho" + RESET);
+        System.out.println(util.ConsoleColors.VERDE + util.ConsoleColors.FUNDO_CIANO + "Bem vindo (a) ao Banco Meu Dinheirinho" + util.ConsoleColors.RESET);
         System.out.println("Por favor, escolha uma opção");
-        System.out.println(AZUL + "[1] " + RESET + "Já sou cliente");
-        System.out.println(AZUL + "[2] " + RESET + "Quero abrir uma conta");
-        System.out.println(AZUL + "[3] " + RESET + VERMELHO + "Sair" + RESET);
+        System.out.println(util.ConsoleColors.AZUL + "[1] " + util.ConsoleColors.RESET + "Já sou cliente");
+        System.out.println(util.ConsoleColors.AZUL + "[2] " + util.ConsoleColors.RESET + "Quero abrir uma conta");
+        System.out.println(util.ConsoleColors.AZUL + "[3] " + util.ConsoleColors.RESET + util.ConsoleColors.VERMELHO + "Sair" + util.ConsoleColors.RESET);
     }
 
     public static Conta acessarConta(Scanner input) {
@@ -97,11 +96,11 @@ public class App {
 
     public static int selecionarServico(Scanner input) {
         System.out.println("Por favor, escolha um serviço abaixo: ");
-        System.out.println(AZUL + "[1]" + RESET + " Depositar \n" +
-                AZUL + "[2]" + RESET + " Sacar \n" +
-                AZUL + "[3]" + RESET + " Transferir \n" +
-                AZUL + "[4]" + RESET + " Consultar Saldo \n" +
-                AZUL + "[5]" + RESET + " Sair");
+        System.out.println(util.ConsoleColors.AZUL + "[1]" + util.ConsoleColors.RESET + " Depositar \n" +
+        util.ConsoleColors.AZUL + "[2]" + util.ConsoleColors.RESET + " Sacar \n" +
+        util.ConsoleColors.AZUL + "[3]" + util.ConsoleColors.RESET + " Transferir \n" +
+        util.ConsoleColors.AZUL + "[4]" + util.ConsoleColors.RESET + " Consultar Saldo \n" +
+        util.ConsoleColors.AZUL + "[5]" + util.ConsoleColors.RESET + " Sair");
         int servico = input.nextInt();
         return servico;
     }
@@ -109,11 +108,11 @@ public class App {
     public static Cliente inserirDadosPessoais(Scanner input) {
         SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
         System.out.println("Que ótimo termos você conosco!");
-        System.out.println("Por favor, insira seu " + VERDE + "nome: " + RESET);
+        System.out.println("Por favor, insira seu " + util.ConsoleColors.VERDE + "nome: " + util.ConsoleColors.RESET);
         String nomeCliente = input.nextLine();
-        System.out.println("Por favor, insira seu " + VERDE + "CPF: " + RESET);
+        System.out.println("Por favor, insira seu " + util.ConsoleColors.VERDE + "CPF: " + util.ConsoleColors.RESET);
         String cpfCliente = input.nextLine();
-        System.out.println("Por favor, insira sua " + VERDE + "data de nascimento" + RESET + " no formato dia/mes/ano");
+        System.out.println("Por favor, insira sua " + util.ConsoleColors.VERDE + "data de nascimento" + util.ConsoleColors.RESET + " no formato dia/mes/ano");
         Date nasCliente = null;
         try {
             nasCliente = sdf.parse(input.nextLine());
@@ -124,19 +123,19 @@ public class App {
     }
 
     public static Endereco inserirDadosEndereco(Scanner input) {
-        System.out.println("Agora, insira o nome da sua " + VERDE + "rua: " + RESET);
+        System.out.println("Agora, insira o nome da sua " + util.ConsoleColors.VERDE + "rua: " + util.ConsoleColors.RESET);
         String rua = input.nextLine();
-        System.out.println("Insira o " + VERDE + " número" + RESET + " da sua casa: ");
+        System.out.println("Insira o " + util.ConsoleColors.VERDE + " número" + util.ConsoleColors.RESET + " da sua casa: ");
         int numero = input.nextInt();
         input.nextLine();
-        System.out.println("Ótimo! Agora, o nome da sua " + VERDE + "cidade: " + RESET);
+        System.out.println("Ótimo! Agora, o nome da sua " + util.ConsoleColors.VERDE + "cidade: " + util.ConsoleColors.RESET);
         String cidade = input.nextLine();
         return new Endereco(rua, numero, cidade);
     }
 
     public static Conta criarConta(Cliente cli, Scanner input) {
         System.out.println("Selecione: ");
-        System.out.println(AZUL + "[1] " + RESET + "Conta Corrente" + AZUL + "\n[2] " + RESET + "Conta Poupança");
+        System.out.println(util.ConsoleColors.AZUL + "[1] " + util.ConsoleColors.RESET + "Conta Corrente" + util.ConsoleColors.AZUL + "\n[2] " + util.ConsoleColors.RESET + "Conta Poupança");
         int tipoConta = input.nextInt();
         input.nextLine();
         switch (tipoConta) {
@@ -145,7 +144,7 @@ public class App {
             case 2:
                 return new ContaPoupanca(cli);
             default:
-                System.out.println(VERMELHO + "Opção inválida" + RESET);
+                System.out.println(util.ConsoleColors.VERMELHO + "Opção inválida" + util.ConsoleColors.RESET);
                 return null;
         }
     }
